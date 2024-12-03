@@ -5,6 +5,15 @@ const formempleado = document.getElementById('formempleado');
 let idEmpleado = null;
 let opcion = '';
 
+// Función para formatear la fecha
+const formatearFecha = (fecha) => {
+    const date = new Date(fecha);
+    const dia = String(date.getDate()).padStart(2, '0');
+    const mes = String(date.getMonth() + 1).padStart(2, '0'); // Los meses van de 0 a 11
+    const anio = date.getFullYear();
+    return `${dia}/${mes}/${anio}`;
+};
+
 // Cargar empleados
 const cargarEmpleados = () => {
     fetch(url)
@@ -19,7 +28,7 @@ const cargarEmpleados = () => {
                     <td>${emp.cargo}</td>
                     <td>${emp.area}</td>
                     <td>${emp.salario}</td>
-                    <td>${emp.fecha_ingreso}</td>
+                    <td>${formatearFecha(emp.fecha_ingreso)}</td>
                     <td>
                         <button class="btn btn-primary btn-editar" data-id="${emp.id}">Editar</button>
                         <button class="btn btn-danger btn-eliminar" data-id="${emp.id}">Eliminar</button>
@@ -77,7 +86,7 @@ contenedor.addEventListener('click', (e) => {
                 document.getElementById('cargo').value = data.cargo;
                 document.getElementById('area').value = data.area;
                 document.getElementById('salario').value = data.salario;
-                document.getElementById('fecha_ingreso').value = data.fecha_ingreso;
+                document.getElementById('fecha_ingreso').value = data.fecha_ingreso.split('T')[0]; // Mantener formato YYYY-MM-DD
                 idEmpleado = id;
                 opcion = 'editar';
                 modalempleado.show();

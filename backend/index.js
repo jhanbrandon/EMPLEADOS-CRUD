@@ -64,9 +64,11 @@ app.post('/api/empleados', (req, res) => {
 app.put('/api/empleados/:id', (req, res) => {
     const id = req.params.id;
     const data = req.body;
+    console.log("Datos recibidos para actualizar:", data);
     const sql = "UPDATE empleados SET ? WHERE id = ?";
     conexion.query(sql, [data, id], (error, resultado) => {
         if (error) {
+            console.error("Error al actualizar empleado:", error);
             res.status(500).send(error);
         } else {
             res.send(resultado);
