@@ -5,9 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Gestión de Empleados</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/frontend/styles.css" rel="stylesheet">
+
 </head>
 <body class="container">
     <h1 class="mt-4">Gestión de Empleados</h1>
+
+    <div class="d-flex justify-content-between mb-3">
+        <input id="buscarInput" type="text" class="form-control w-50 me-2" placeholder="Buscar por nombre o cédula">
+        <select id="filtroArea" class="form-select w-25 me-2">
+            <option value="">Filtrar por área</option>
+            <option value="Recursos Humanos">Recursos Humanos</option>
+            <option value="Sistemas">Sistemas</option>
+            <option value="Contabilidad">Contabilidad</option>
+            <option value="Administración">Administración</option>
+        </select>
+        <select id="filtroCargo" class="form-select w-25">
+            <option value="">Filtrar por cargo</option>
+            <option value="Asistente">Asistente</option>
+            <option value="Gerente">Gerente</option>
+            <option value="Analista">Analista</option>
+            <option value="Contador">Contador</option>
+        </select>
+    </div>   
+
+
     <button id="btncrear" type="button" class="btn btn-primary mb-3">Crear Empleado</button>
     <table id="tablaempleados" class="table table-bordered">
         <thead>

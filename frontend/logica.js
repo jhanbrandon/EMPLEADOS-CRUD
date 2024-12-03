@@ -2,6 +2,10 @@ const url = "http://localhost:3001/api/empleados";
 const contenedor = document.querySelector('tbody');
 const modalempleado = new bootstrap.Modal(document.getElementById('modalempleado'));
 const formempleado = document.getElementById('formempleado');
+const buscarInput = document.getElementById('buscarInput');
+const filtroArea = document.getElementById('filtroArea');
+const filtroCargo = document.getElementById('filtroCargo');
+let empleados = [];
 let idEmpleado = null;
 let opcion = '';
 
@@ -19,25 +23,53 @@ const cargarEmpleados = () => {
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            let resultados = '';
-            data.forEach(emp => {
-                resultados += `<tr>
-                    <td>${emp.id}</td>
-                    <td>${emp.cedula}</td>
-                    <td>${emp.nombre}</td>
-                    <td>${emp.cargo}</td>
-                    <td>${emp.area}</td>
-                    <td>${emp.salario}</td>
-                    <td>${formatearFecha(emp.fecha_ingreso)}</td>
-                    <td>
-                        <button class="btn btn-primary btn-editar" data-id="${emp.id}">Editar</button>
-                        <button class="btn btn-danger btn-eliminar" data-id="${emp.id}">Eliminar</button>
-                    </td>
-                </tr>`;
-            });
-            contenedor.innerHTML = resultados;
+            empleados = data; // Guardar todos los empleados para búsquedas y filtros
+            mostrarEmpleados(data);
         });
 };
+
+// Mostrar empleados en la tabla
+const mostrarEmpleados = (lista) => {
+    let resultados = '';
+    lista.forEach(emp => {
+        resultados += `<tr>
+            <td>${emp.id}</td>
+            <td>${emp.cedula}</td>
+            <td>${emp.nombre}</td>
+            <td>${emp.cargo}</td>
+            <td>${emp.area}</td>
+            <td>${emp.salario}</td>
+            <td>${formatearFecha(emp.fecha_ingreso)}</td>
+            <td>
+                <button class="btn btn-primary btn-editar" data-id="${emp.id}">Editar</button>
+                <button class="btn btn-danger btn-eliminar" data-id="${emp.id}">Eliminar</button>
+            </td>
+        </tr>`;
+    });
+    contenedor.innerHTML = resultados;
+};
+
+// Buscar empleados por nombre o cédula
+buscarInput.addEventListener('input', () => {
+    const busqueda = buscarInput.value.toLowerCase();
+    const resultados = empleados.filter(emp =>
+        emp.nombre.toLowerCase().includes(busqueda) || emp.cedula.includes(busqueda)
+    );
+    mostrarEmpleados(resultados);
+});
+
+// Filtrar empleados por área o cargo
+[filtroArea, filtroCargo].forEach(filtro => {
+    filtro.addEventListener('change', () => {
+        const area = filtroArea.value;
+        const cargo = filtroCargo.value;
+        const resultados = empleados.filter(emp =>
+            (area === '' || emp.area === area) &&
+            (cargo === '' || emp.cargo === cargo)
+        );
+        mostrarEmpleados(resultados);
+    });
+});
 
 document.getElementById("btncrear").addEventListener("click", () => {
     formempleado.reset();
